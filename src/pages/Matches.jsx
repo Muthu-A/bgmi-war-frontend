@@ -33,20 +33,13 @@ export default function Matches() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    loadWars();
-    loadTeams();
-  }, [season]);
-
-  useEffect(() => {
-    applyFilters();
-  }, [filters, wars]);
-
   const loadTeams = async () => {
     try {
       const res = await API.get("/teams");
       setTeams(res.data);
-    } catch (e) {}
+    } catch (err) {
+      // ignore
+    }
   };
 
   const loadWars = async () => {
@@ -56,7 +49,7 @@ export default function Matches() {
       setWars(res.data);
       setFilteredWars(res.data);
       setIsLoading(false);
-    } catch (e) {
+    } catch (err) {
       setIsLoading(false);
     }
   };
@@ -90,6 +83,15 @@ export default function Matches() {
       setFilteredWars(updated);
     }
   };
+
+  useEffect(() => {
+    loadWars();
+    loadTeams();
+  }, [season]);
+
+  useEffect(() => {
+    applyFilters();
+  }, [filters, wars]);
   const highlightedDates = useMemo(() => {
     if (!wars.length) return [];
 

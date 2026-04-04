@@ -22,20 +22,21 @@ export default function Teams() {
     backup: "",
   });
 
-  useEffect(() => {
-    loadTeams();
-  }, []);
-
   const loadTeams = async () => {
     setIsLoading(true);
     try {
       const res = await API.get("/teams");
       setTeams(res.data);
       setIsLoading(false);
-    } catch (e) {
+    } catch (err) {
       setIsLoading(false);
+      console.error(err);
     }
   };
+
+  useEffect(() => {
+    loadTeams();
+  }, []);
 
   const resetForm = () => {
     setForm({
@@ -159,7 +160,8 @@ export default function Teams() {
         await API.post("/teams/bulk", teamsData);
         setIsAddLoading(false);
         loadTeams();
-      } catch (e) {
+      } catch (err) {
+        console.error(err);
         setIsAddLoading(false);
       }
     };

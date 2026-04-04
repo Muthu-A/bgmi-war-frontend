@@ -45,6 +45,7 @@ export default function HeaderSeasonMenu({ isOpen }) {
 
       toast.success("Season started 🚀");
     } catch (err) {
+      console.error(err);
       toast.error("Failed to start season");
     } finally {
       setLoading(false);
@@ -65,6 +66,7 @@ export default function HeaderSeasonMenu({ isOpen }) {
 
       toast.success("Season ended 🛑");
     } catch (err) {
+      console.error(err);
       toast.error("Failed to end season");
     } finally {
       setLoading(false);
