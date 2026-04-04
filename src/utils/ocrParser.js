@@ -27,7 +27,7 @@ export function parseOCRText(text) {
   return players;
 }
 
-export function groupByRank(players, warType) {
+export function groupByRank(players) {
   const grouped = {};
 
   players.forEach(p => {
