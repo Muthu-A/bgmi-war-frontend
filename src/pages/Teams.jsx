@@ -175,10 +175,66 @@ export default function Teams() {
 
   return (
     <Layout>
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">👥 War Teams</h1>
-        <div>
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-blue-900/20 to-green-900/20 rounded-2xl p-8 border border-blue-500/20 mb-6">
+        <div className="text-center space-y-4">
+          <div className="text-4xl mb-4">👥</div>
+          <h2 className="text-3xl font-bold text-green-400">
+            Team Management Hub
+          </h2>
+          <p className="text-xl text-gray-300">
+            "Build Elite Squads - Manage Players & Formations"
+          </p>
+          <div className="flex justify-center gap-6 mt-6">
+            <div className="bg-slate-800/50 px-4 py-2 rounded-lg">
+              <div className="text-2xl font-bold text-blue-400">{teams.length}</div>
+              <div className="text-sm text-gray-400">Active Teams</div>
+            </div>
+            <div className="bg-slate-800/50 px-4 py-2 rounded-lg">
+              <div className="text-2xl font-bold text-green-400">{teams.reduce((acc, team) => acc + team.players.length, 0)}</div>
+              <div className="text-sm text-gray-400">Total Players</div>
+            </div>
+            <div className="bg-slate-800/50 px-4 py-2 rounded-lg">
+              <div className="text-2xl font-bold text-purple-400">{teams.filter(team => team.backup).length}</div>
+              <div className="text-sm text-gray-400">Backup Ready</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Team Management Tools */}
+      <div className="grid md:grid-cols-3 gap-4 mb-6">
+        <div className="bg-slate-800/50 p-4 rounded-xl border border-gray-700">
+          <div className="text-2xl mb-2">⚙️</div>
+          <h3 className="text-sm font-semibold text-blue-400 mb-1">Team Creation</h3>
+          <p className="text-gray-400 text-xs">
+            Register new teams with player rosters and backup members.
+          </p>
+        </div>
+        <div className="bg-slate-800/50 p-4 rounded-xl border border-gray-700">
+          <div className="text-2xl mb-2">📊</div>
+          <h3 className="text-sm font-semibold text-green-400 mb-1">Player Management</h3>
+          <p className="text-gray-400 text-xs">
+            Update squad compositions and track player assignments.
+          </p>
+        </div>
+        <div className="bg-slate-800/50 p-4 rounded-xl border border-gray-700">
+          <div className="text-2xl mb-2">📤</div>
+          <h3 className="text-sm font-semibold text-purple-400 mb-1">Bulk Operations</h3>
+          <p className="text-gray-400 text-xs">
+            Import teams via Excel and manage multiple registrations.
+          </p>
+        </div>
+      </div>
+
+      {/* Enhanced Header */}
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
+        <div className="flex-1">
+          <h1 className="text-2xl font-bold mb-2">👥 Elite Squads</h1>
+          <p className="text-gray-400 text-sm">Manage tournament participants and player rosters</p>
+        </div>
+
+        <div className="flex gap-3">
           <input
             type="file"
             accept=".xlsx, .csv"
@@ -189,72 +245,90 @@ export default function Teams() {
 
           <label
             htmlFor="bulkUpload"
-            className="bg-blue-500 px-4 py-2 rounded cursor-pointer ml-2"
+            className="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg cursor-pointer transition-colors flex items-center gap-2"
           >
-            Upload Excel
+            📤 Bulk Import
           </label>
           <Button
             onClick={openAdd}
-            className="bg-green-500 px-4 py-2 rounded ml-2"
+            className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
           >
-            {"+ Add Team"}
+            ➕ New Team
           </Button>
         </div>
       </div>
 
-      {/* Search */}
-      <input
-        type="text"
-        placeholder="🔍 Search team..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="w-full mb-4 p-2 bg-slate-800 rounded outline-none"
-      />
+      {/* Enhanced Search */}
+      <div className="bg-slate-800/30 p-4 rounded-xl border border-gray-700 mb-6">
+        <div className="flex gap-4 items-center">
+          <div className="text-2xl">🔍</div>
+          <input
+            type="text"
+            placeholder="Search teams by name..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="flex-1 bg-slate-900 border border-gray-600 rounded-lg px-4 py-2 focus:border-blue-500 focus:outline-none"
+          />
+          <div className="text-sm text-gray-400">
+            {filteredTeams.length} of {teams.length} teams
+          </div>
+        </div>
+      </div>
 
-      {/* Table */}
-      <div className="bg-slate-800 rounded-xl h-[calc(100vh-240px)] flex flex-col">
-        {/* Header */}
-        <div className="grid grid-cols-4 text-gray-400 p-3 border-b border-gray-700 sticky top-0 bg-slate-800 z-10">
-          <div>Team</div>
+      {/* Teams Table */}
+      <div className="bg-slate-800 rounded-xl overflow-hidden border border-gray-700">
+        {/* Table Header */}
+        <div className="grid grid-cols-5 text-gray-400 p-4 border-b border-gray-700 bg-slate-900 sticky top-0 z-10 font-semibold">
+          <div>Team Name</div>
           <div>Players</div>
           <div>Backup</div>
+          <div>Status</div>
           <div className="text-center">Actions</div>
         </div>
 
         {isLoading ? (
-          <Loader message={"Loading Teams..."} />
+          <div className="p-8 text-center">
+            <Loader message={"Loading Elite Squads..."} />
+          </div>
+        ) : filteredTeams.length === 0 ? (
+          <div className="text-center py-12">
+            <div className="text-6xl mb-4">🏆</div>
+            <h3 className="text-xl font-semibold text-gray-400 mb-2">No Teams Found</h3>
+            <p className="text-gray-500">Start building your championship squads!</p>
+          </div>
         ) : (
-          <div className="overflow-y-auto flex-1">
+          <div className="divide-y divide-gray-700">
             {filteredTeams.map((team) => (
               <div
                 key={team._id}
-                className="grid grid-cols-4 p-3 border-b border-gray-700 items-center"
+                className="grid grid-cols-5 p-4 items-center hover:bg-slate-700/50 transition-colors"
               >
-                <div>{team.name}</div>
-
-                <div className="truncate">{team.players.join(", ")}</div>
-
-                <div>{team.backup}</div>
-
+                <div className="text-blue-400 font-semibold">{team.name}</div>
+                <div className="text-sm text-gray-300">{team.players.join(", ")}</div>
+                <div className="text-sm text-gray-300">{team.backup || "—"}</div>
+                <div>
+                  <span className={`text-xs px-2 py-1 rounded ${
+                    team.players.filter(p => p.trim()).length === 4 && team.backup
+                      ? 'bg-green-900/50 text-green-300'
+                      : 'bg-yellow-900/50 text-yellow-300'
+                  }`}>
+                    {team.players.filter(p => p.trim()).length === 4 && team.backup ? 'Complete' : 'Incomplete'}
+                  </span>
+                </div>
                 <div className="flex gap-3 justify-center">
                   <Pencil
                     onClick={() => openEdit(team)}
-                    className="cursor-pointer text-blue-400"
+                    className="cursor-pointer text-blue-400 hover:text-blue-300 transition-colors"
                     size={18}
                   />
-
                   <Trash2
                     onClick={() => handleDelete(team._id)}
-                    className="cursor-pointer text-red-400"
+                    className="cursor-pointer text-red-400 hover:text-red-300 transition-colors"
                     size={18}
                   />
                 </div>
               </div>
             ))}
-
-            {filteredTeams.length === 0 && (
-              <p className="text-gray-400 p-4">No teams found</p>
-            )}
           </div>
         )}
       </div>

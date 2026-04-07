@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LayoutDashboard, Users, Gamepad2, Swords, LogOut } from "lucide-react";
 import HeaderSeasonMenu from "./HeaderSeasonMenu";
 
 export default function Layout({ children }) {
   const location = useLocation();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const isAdmin = localStorage.getItem("role");
   // Helper to check if a path is active
@@ -55,17 +56,17 @@ export default function Layout({ children }) {
         {/* Bottom Section (Optional Logout/Profile) */}
         <div className="p-4 border-t border-slate-700">
           <button
-            className="flex items-center gap-3 w-full px-4 py-3 text-slate-400 hover:text-red-400 transition-colors"
+            className="flex items-center cursor-pointer gap-3 w-full px-4 py-3 text-slate-400 hover:text-red-400 transition-colors"
             onClick={() => {
               // Clear token and role from localStorage
               localStorage.removeItem("token");
               localStorage.removeItem("role");
               // Redirect to login
-              window.location.href = "/login";
+              navigate("/login", { replace: true });
             }}
           >
-            <LogOut size={20} />
-            <span className="font-medium">Logout</span>
+            <LogOut size={20} className="text-red-400"/>
+            <span className="font-medium text-red-400">Logout</span>
           </button>
         </div>
       </aside>
