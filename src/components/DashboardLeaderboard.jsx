@@ -2,7 +2,7 @@ import Loader from "./Loader";
 
 export default function DashboardLeaderboard({ leaderboard, isLoading }) {
   return (
-    <div className="w-1/3 flex justify-center items-start">
+    <div className="w-full lg:w-1/3 flex justify-center items-start">
       <div className="w-full h-full max-w-sm bg-slate-800 rounded-2xl border border-gray-700 p-4 shadow-lg flex flex-col">
         {/* Title */}
         <h2 className="text-center text-lg font-bold mb-4 tracking-wide">

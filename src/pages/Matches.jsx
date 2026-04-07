@@ -123,84 +123,135 @@ export default function Matches() {
 
   return (
     <Layout>
-      {/* Filters */}
-      <div className="flex justify-between items-center mb-4">
-        {/* Left: Header */}
-        <h1 className="text-2xl font-bold">📊 Match History</h1>
-
-        {/* Right: Filters */}
-        <div className="flex gap-2 relative z-20">
-          <DatePicker
-            selected={selectedDate}
-            onChange={(date) => {
-              setSelectedDate(date);
-              setFilters({ ...filters, date });
-            }}
-            highlightDates={highlightedDates}
-            placeholderText="Select a date"
-            className="bg-slate-900 text-white p-2 rounded w-48 border border-white"
-            isClearable
-          >
-            <div className="border-t border-gray-200 mt-2 p-2 text-xs flex flex-row gap-1 bg-white">
-              <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full bg-amber-500"></span>
-                <span className="text-gray-700">Solo</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full bg-blue-500"></span>
-                <span className="text-gray-700">Duo</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full bg-red-500"></span>
-                <span className="text-gray-700">Squad</span>
-              </div>
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-purple-900/20 to-red-900/20 rounded-2xl p-8 border border-purple-500/20 mb-6">
+        <div className="text-center space-y-4">
+          <div className="text-4xl mb-4">🏆</div>
+          <h2 className="text-3xl font-bold text-purple-400">
+            Tournament History
+          </h2>
+          <p className="text-xl text-gray-300">
+            "Track Victories - Analyze Performance - Celebrate Champions"
+          </p>
+          <div className="flex justify-center gap-6 mt-6">
+            <div className="bg-slate-800/50 px-4 py-2 rounded-lg">
+              <div className="text-2xl font-bold text-purple-400">{wars.length}</div>
+              <div className="text-sm text-gray-400">Total Wars</div>
             </div>
-          </DatePicker>
-          <select
-            className="bg-slate-900 text-white p-2 rounded border border-white"
-            value={filters.team}
-            onChange={(e) => setFilters({ ...filters, team: e.target.value })}
-          >
-            <option value="all">All Teams</option>
-            {teams.map((t) => (
-              <option key={t._id} value={t.name}>
-                {t.name}
-              </option>
-            ))}
-          </select>
-          <select
-            className="bg-slate-900 text-white p-2 rounded border border-white"
-            value={filters.matchType}
-            onChange={(e) =>
-              setFilters({ ...filters, matchType: e.target.value })
-            }
-          >
-            <option value="all">All Match Types</option>
-            <option value="solo">Solo</option>
-            <option value="duo">Duo</option>
-            <option value="squad">Squad</option>
-          </select>
-
-          <select
-            className="bg-slate-900 text-white p-2 rounded border border-white"
-            value={filters.warType}
-            onChange={(e) =>
-              setFilters({ ...filters, warType: e.target.value })
-            }
-          >
-            <option value="all">All War Types</option>
-            <option value="placement">Placement</option>
-            <option value="placement_kills">Placement + Kills</option>
-            <option value="highest_wins">Highest Wins</option>
-            <option value="highest_kills">Highest Kills</option>
-          </select>
+            <div className="bg-slate-800/50 px-4 py-2 rounded-lg">
+              <div className="text-2xl font-bold text-red-400">{wars.reduce((acc, war) => acc + (war?.matches?.length || 0), 0)}</div>
+              <div className="text-sm text-gray-400">Matches Played</div>
+            </div>
+            <div className="bg-slate-800/50 px-4 py-2 rounded-lg">
+              <div className="text-2xl font-bold text-yellow-400">₹{wars.reduce((acc, war) => acc + parseInt(war.prize || 0), 0)}</div>
+              <div className="text-sm text-gray-400">Prize Distributed</div>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Table */}
-      <div className="bg-slate-800 rounded-xl h-[calc(100vh-180px)] flex flex-col">
-        {/* Header */}
-        <div className="grid grid-cols-6 text-gray-400 p-3 border-b border-gray-700 sticky top-0 bg-slate-800 z-10">
+      {/* Match Management Tools */}
+      <div className="grid md:grid-cols-3 gap-4 mb-6">
+        <div className="bg-slate-800/50 p-4 rounded-xl border border-gray-700">
+          <div className="text-2xl mb-2">📈</div>
+          <h3 className="text-sm font-semibold text-purple-400 mb-1">Performance Analytics</h3>
+          <p className="text-gray-400 text-xs">
+            Analyze team performance, win rates, and tournament statistics.
+          </p>
+        </div>
+        <div className="bg-slate-800/50 p-4 rounded-xl border border-gray-700">
+          <div className="text-2xl mb-2">🎯</div>
+          <h3 className="text-sm font-semibold text-red-400 mb-1">Match Tracking</h3>
+          <p className="text-gray-400 text-xs">
+            Monitor live matches, update results, and track progress.
+          </p>
+        </div>
+        <div className="bg-slate-800/50 p-4 rounded-xl border border-gray-700">
+          <div className="text-2xl mb-2">📊</div>
+          <h3 className="text-sm font-semibold text-blue-400 mb-1">Historical Data</h3>
+          <p className="text-gray-400 text-xs">
+            Access complete tournament history and championship records.
+          </p>
+        </div>
+      </div>
+
+      {/* Filters */}
+      <div className="bg-slate-800/30 p-6 rounded-xl border border-gray-700 mb-6 relative z-30">
+        <h3 className="text-lg font-semibold mb-4 text-purple-400 flex items-center gap-2">
+          🎯 Filter Tournaments
+        </h3>
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="relative z-40">
+            <label className="block text-sm text-gray-400 mb-2">📅 Date Range</label>
+            <DatePicker
+              selected={selectedDate}
+              onChange={(date) => {
+                setSelectedDate(date);
+                setFilters({ ...filters, date });
+              }}
+              highlightDates={highlightedDates}
+              placeholderText="Select date"
+              className="w-full bg-slate-900 text-white p-2 rounded border border-gray-600 focus:border-purple-500"
+              isClearable
+              popperClassName="!z-50"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm text-gray-400 mb-2">👥 Team</label>
+            <select
+              className="w-full bg-slate-900 text-white p-2 rounded border border-gray-600 focus:border-purple-500"
+              value={filters.team}
+              onChange={(e) => setFilters({ ...filters, team: e.target.value })}
+            >
+              <option value="all">All Teams</option>
+              {teams.map((t) => (
+                <option key={t._id} value={t.name}>{t.name}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm text-gray-400 mb-2">🎮 Match Type</label>
+            <select
+              className="w-full bg-slate-900 text-white p-2 rounded border border-gray-600 focus:border-purple-500"
+              value={filters.matchType}
+              onChange={(e) => setFilters({ ...filters, matchType: e.target.value })}
+            >
+              <option value="all">All Types</option>
+              <option value="solo">Solo</option>
+              <option value="duo">Duo</option>
+              <option value="squad">Squad</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm text-gray-400 mb-2">🏆 War Type</label>
+            <select
+              className="w-full bg-slate-900 text-white p-2 rounded border border-gray-600 focus:border-purple-500"
+              value={filters.warType}
+              onChange={(e) => setFilters({ ...filters, warType: e.target.value })}
+            >
+              <option value="all">All Wars</option>
+              <option value="placement">Placement</option>
+              <option value="placement_kills">Placement + Kills</option>
+              <option value="highest_wins">Highest Wins</option>
+              <option value="highest_kills">Highest Kills</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="mt-4 flex justify-between items-center">
+          <div className="text-sm text-gray-400">
+            Showing {filteredWars.length} of {wars.length} tournaments
+          </div>
+        </div>
+      </div>
+
+      {/* Tournaments Table */}
+      <div className="bg-slate-800 rounded-xl overflow-hidden border border-gray-700">
+        {/* Table Header */}
+        <div className="grid grid-cols-6 text-gray-400 p-4 border-b border-gray-700 bg-slate-900 sticky top-0 z-10 font-semibold">
           <div>Title</div>
           <div>War Type</div>
           <div>Match Type</div>
@@ -210,39 +261,56 @@ export default function Matches() {
         </div>
 
         {isLoading ? (
-          <Loader message={"Loading Matches..."} />
+          <div className="p-8 text-center">
+            <Loader message={"Loading Tournament History..."} />
+          </div>
+        ) : filteredWars.length === 0 ? (
+          <div className="text-center py-12">
+            <div className="text-6xl mb-4">🏆</div>
+            <h3 className="text-xl font-semibold text-gray-400 mb-2">No Tournaments Found</h3>
+            <p className="text-gray-500">Start your first championship to see results here!</p>
+          </div>
         ) : (
-          <div className="overflow-y-auto flex-1">
-            {filteredWars.length > 0 ? (
-              filteredWars.map((war) => (
-                <div
-                  key={war._id}
-                  className="grid grid-cols-6 p-3 border-b border-gray-700 items-center text-left"
-                >
-                  <div>{war.warTitle}</div>
-                  <div>{warTypeNames[war.type] || war.type}</div>
-                  <div>{matchTypeNames[war.mode] || war.mode}</div>
-                  <div>₹{war.prize}</div>
-                  <div className="text-green-400">
-                    {war?.type === "wins"
-                      ? [...new Set(war?.results?.map((el) => el.teamName))].join(", ")
-                      : war.winner?.teamName}
-                  </div>
-                  <div>
-                    {new Date(war.endDate).toLocaleString("en-US", {
-                      year: "numeric",
-                      month: "short",
-                      day: "2-digit",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: true,
-                    })}
-                  </div>
+          <div className="divide-y divide-gray-700">
+            {filteredWars.map((war) => (
+              <div
+                key={war._id}
+                className="grid grid-cols-6 p-4 items-center hover:bg-slate-700/50 transition-colors text-sm"
+              >
+                <div className="text-purple-400 font-semibold">{war.warTitle}</div>
+                <div>
+                  <span className={`px-2 py-1 rounded text-xs ${
+                    war.type === 'highest_wins' ? 'bg-yellow-900/50 text-yellow-300' :
+                    war.type === 'highest_kills' ? 'bg-red-900/50 text-red-300' :
+                    'bg-blue-900/50 text-blue-300'
+                  }`}>
+                    {warTypeNames[war.type] || war.type}
+                  </span>
                 </div>
-              ))
-            ) : (
-              <p className="text-gray-400 p-4">No matches found</p>
-            )}
+                <div>
+                  <span className={`px-2 py-1 rounded text-xs ${
+                    war.mode === 'solo' ? 'bg-amber-900/50 text-amber-300' :
+                    war.mode === 'duo' ? 'bg-blue-900/50 text-blue-300' :
+                    'bg-red-900/50 text-red-300'
+                  }`}>
+                    {matchTypeNames[war.mode] || war.mode}
+                  </span>
+                </div>
+                <div className="text-yellow-400 font-semibold">₹{war.prize}</div>
+                <div className="text-green-400">
+                  {war?.type === "wins"
+                    ? [...new Set(war?.results?.map((el) => el.teamName))].join(", ")
+                    : war.winner?.teamName || 'TBD'}
+                </div>
+                <div className="text-gray-300 text-xs">
+                  {new Date(war.endDate).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "2-digit",
+                    year: "numeric"
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>

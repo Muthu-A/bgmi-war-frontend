@@ -13,7 +13,7 @@ export default function EndWarPopup({
           ⚠️ End War Confirmation
         </h2>
 
-        {tieTeams.length > 1 && war.type !== "wins" ? (
+        {tieTeams?.length > 1 && war?.type !== "wins" ? (
           <>
             <p className="text-sm text-gray-300 mb-3 text-center">
               Multiple teams have same points. Select winner:
